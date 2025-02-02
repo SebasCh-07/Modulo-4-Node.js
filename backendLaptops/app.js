@@ -41,7 +41,7 @@ app.put("/laptops/:idParam",(request,response)=>{
 
 app.delete("/laptops/:idParam",(request,response)=>{
     console.log("id: "+request.params.idParam);
-    response.send()
+    response.send({id:request.params.idParam})
 })
 
 app.listen(puerto,()=>{
