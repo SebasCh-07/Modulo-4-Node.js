@@ -1,71 +1,89 @@
-import { View,StyleSheet, Alert } from "react-native"
-import {Button,Input} from "@rneui/base"
+import { View, StyleSheet, Alert } from "react-native"
+import { Button, Input } from "@rneui/base"
 import { useState } from "react"
-import {saveLaptopRest} from "../rest_laptop/laptop"
+import { saveLaptopRest, updateLaptopRest } from "../rest_laptop/laptop"
 
 
-export const LaptopForm = ({navigation}) => {
-    const [marca, setMarca] = useState()
-    const [procesador, setProcesador] = useState()
-    const [memoria, setMemoria] = useState()
-    const [disco, setDisco] = useState()
-    
-    const showMessage = () => {
-        Alert.alert("CONFIGURACION", "Se registro la Laptop")
+export const LaptopForm = ({ navigation, route }) => {
+    let laptopRetrieved = route.params.laptopParam
+    let isNew = true
+    if (laptopRetrieved != null) {
+        isNew = false;
     }
 
-    const guardarLaptop = () => {
-        console.log("Guardar")
+    const [marca, setMarca] = useState(isNew ? null : laptopRetrieved.marca)
+    const [procesador, setProcesador] = useState(isNew ? null : laptopRetrieved.procesador)
+    const [memoria, setMemoria] = useState(isNew ? null : laptopRetrieved.memoria)
+    const [disco, setDisco] = useState(isNew ? null : laptopRetrieved.disco)
+
+    const showMessage = () => {
+        Alert.alert("CONFIGURACION", isNew ? "Se registro la Laptop" : "Laptop Actualizada")
         navigation.goBack()
+    }
+
+    const crearLaptop = () => {
+        console.log("Guardar")
         saveLaptopRest({
             marca: marca,
             procesador: procesador,
             memoria: memoria,
             disco: disco
         },
-        showMessage
-    )
+            showMessage
+        )
+    }
+
+    const updateLaptop = () => {
+        console.log("Actualizar")
+        updateLaptopRest({
+            id: laptopRetrieved.id,
+            marca: marca,
+            procesador: procesador,
+            memoria: memoria,
+            disco: disco
+        }, 
+        showMessage)
     }
 
     return <View style={styles.container}>
-        <Input 
+        <Input
             value={marca}
             placeholder="MARCA"
-            onChangeText={(value)=>{
+            onChangeText={(value) => {
                 setMarca(value)
             }}
         />
-        <Input 
+        <Input
             value={procesador}
             placeholder="PROCESADOR"
-            onChangeText={(value)=>{
+            onChangeText={(value) => {
                 setProcesador(value)
             }}
         />
-        <Input 
+        <Input
             value={memoria}
             placeholder="MEMORIA"
-            onChangeText={(value)=>{
+            onChangeText={(value) => {
                 setMemoria(value)
             }}
         />
-        <Input 
+        <Input
             value={disco}
             placeholder="DISCO"
-            onChangeText={(value)=>{
+            onChangeText={(value) => {
                 setDisco(value)
             }}
         />
-        <Button title="GUARDAR" onPress={guardarLaptop}/>
+        <Button title="GUARDAR" onPress={isNew ? crearLaptop : updateLaptop} />
 
     </View>
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-  });
+});
