@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const puerto = 3001
+const puerto = 8080
 
 app.use(bodyParser.json())
 
