@@ -5,6 +5,7 @@ import {ContactsForm} from "./screens/ContactsForm"
 
 export default function App() {
   const stackContacts = createNativeStackNavigator()
+ 
   return (
     <NavigationContainer>
       <stackContacts.Navigator initialRouteName="ContactsListNav">

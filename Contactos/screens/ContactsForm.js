@@ -1,8 +1,7 @@
 import { View, Text, StyleSheet, Alert } from "react-native"
 import { Button, Input } from "@rneui/base"
 import { useState } from "react"
-import { saveContactRest, updateContactRest, deleteContactRest } from "../rest_client/contactos"
-
+import { saveContactRest, updateContactRest, deleteContactRest, getAllContacts } from "../rest_client/contactos"
 
 export const ContactsForm = ({ navigation, route }) => {
     let ContactRetrieved = route.params.contactParam
@@ -15,32 +14,30 @@ export const ContactsForm = ({ navigation, route }) => {
     const [surName, setSurName] = useState(isNew ? null : ContactRetrieved.apellido)
     const [phoneNumber, setPhoneNumber] = useState(isNew ? null : ContactRetrieved.celular)
 
-    console.log(route.params.contactParam)
 
     const showMessage = (msg) => {
-        navigation.goBack()
         Alert.alert("CONFIGURACION", msg)
+        navigation.goBack()
     }
 
     const createContact = () => {
-        console.log("Guardar")
         saveContactRest({
             name: name,
             surname: surName,
             phoneNumber: phoneNumber
         },
-            showMessage
-        )
+            showMessage,
+        ) 
     }
     const updateContact = () => {
-        console.log("Actualizar")
         updateContactRest({
             id: ContactRetrieved.id,
             name: name,
             surname: surName,
             phoneNumber: phoneNumber
         },
-            showMessage)
+            showMessage,
+        )   
     }
 
     const confirmDelete = () => {
@@ -55,7 +52,8 @@ export const ContactsForm = ({ navigation, route }) => {
         deleteContactRest({
             id: ContactRetrieved.id
         },
-            showMessage)
+            showMessage,
+        )  
     }
 
     return <View style={styles.container}>
@@ -82,9 +80,8 @@ export const ContactsForm = ({ navigation, route }) => {
         />
         <Button title="GUARDAR" onPress={isNew ? createContact : updateContact} />
         {
-            isNew ? <View>Crear</View> : <Button title="ELIMINAR" onPress={confirmDelete} />
+            isNew ? <Text>Crear Contacto</Text> : <Button title="ELIMINAR" onPress={confirmDelete} />
         }
-
     </View>
 }
 

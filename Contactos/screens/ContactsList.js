@@ -3,13 +3,13 @@ import { Button, ListItem, FAB } from "@rneui/base"
 import { getAllContacts } from "../rest_client/contactos"
 import { useState, useEffect } from "react"
 
+
 export const ContactsList = ({ navigation }) => {
   const [contactsList, setContactsList] = useState([])
 
   useEffect(() => {
-    console.log("Funcion useEffect")
     getAllContacts(fnRefreshList)
-  }, {});
+  },[contactsList]);
 
   const ConstactItem = ({ contact }) => {
     return <TouchableHighlight onPress={() => {
@@ -28,6 +28,7 @@ export const ContactsList = ({ navigation }) => {
   fnRefreshList = (contacts) => {
     setContactsList(contacts)
   }
+
   return <View style={styles.container}>
     <Text>Lista de Contactos</Text>
     <FlatList
